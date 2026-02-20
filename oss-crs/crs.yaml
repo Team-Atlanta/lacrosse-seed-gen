@@ -1,0 +1,38 @@
+name: lacrosse-seedgen
+type:
+  - bug-finding
+version: "1.0.0"
+docker_registry: ghcr.io/team-atlanta/lacrosse-seedgen
+
+prepare_phase:
+  hcl: oss-crs/docker-bake.hcl
+
+target_build_phase:
+  - name: build-libfuzzer
+    dockerfile: oss-crs/dockerfiles/builder-libfuzzer.Dockerfile
+    outputs:
+      - build-libfuzzer
+
+crs_run_phase:
+  seedgen:
+    dockerfile: oss-crs/dockerfiles/seedgen.Dockerfile
+    additional_env:
+      SEEDGEN_MODELS: "chat-gpt,sonnet-3.5"
+      SEEDGEN_EXAMPLES: "10"
+      SEEDGEN_ROUNDS: "0"
+
+supported_target:
+  mode:
+    - full
+    - delta
+  language:
+    - c
+    - c++
+  sanitizer:
+    - address
+  architecture:
+    - x86_64
+
+required_llms:
+  - oai-gpt-4o
+  - claude-3.5-sonnet
