@@ -26,6 +26,10 @@ else
     echo "[seedgen] WARNING: OSS_CRS_LLM_API_URL not set"
 fi
 
+if [ -n "$OSS_CRS_LLM_API_KEY_FILE" ] && [ -f "$OSS_CRS_LLM_API_KEY_FILE" ]; then
+    OSS_CRS_LLM_API_KEY="$(cat "$OSS_CRS_LLM_API_KEY_FILE")"
+    export OSS_CRS_LLM_API_KEY
+fi
 if [ -n "$OSS_CRS_LLM_API_KEY" ]; then
     export LITELLM_KEY="$OSS_CRS_LLM_API_KEY"
     echo "[seedgen] LITELLM_KEY is set"
